@@ -1,0 +1,1396 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "version": "1.0.1",
+        "title": "Kitchen Hive",
+        "description": "Kitchen Hive API docs",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "consumes": ["application/json", "multipart/form-data"],
+    "produces": ["application/json", "multipart/form-data"],
+    "servers": [
+        {
+            "url": "https://hive-lubv.onrender.com/"
+        },
+        {
+            "url": "http://localhost:4000/"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Products",
+            "description": "Products endpoints"
+        },
+        {
+            "name": "Orders",
+            "description": "Orders endpoints"
+        },
+        {
+            "name": "User",
+            "description": "Users endpoints"
+        },
+        {
+            "name": "Account Info",
+            "description": "Account Info endpoints"
+        }
+    ],
+    "paths": {
+        "/products": {
+            "get": {
+                "tags": ["Products"],
+                "summary": "Get all products",
+                "parameters": [
+                    { "in": "query", "name": "lang", "required": true }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "qukntity": {
+                                            "type": "integer",
+                                            "description": "Кількість документів",
+                                            "example": 10
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/product"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {}
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Products"],
+                "summary": "Create products in db",
+                "parameters": [],
+                "security": [{ "Bearer": [] }],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/productRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 201
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Товар було успішно доданно."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/products/stock": {
+            "get": {
+                "tags": ["Products"],
+                "summary": "Get all products in stock",
+                "parameters": [
+                    { "in": "query", "name": "lang", "required": true }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "qukntity": {
+                                            "type": "integer",
+                                            "description": "Кількість документів",
+                                            "example": 10
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "_id": {
+                                                        "type": "string",
+                                                        "description": "id страви",
+                                                        "example": "64401076c5a9a7ea1c5b4bf6"
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "description": "Назва страви",
+                                                        "example": "Гречана каша"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/products/multiple": {
+            "get": {
+                "tags": ["Products"],
+                "summary": "Get multiple products by ids",
+                "parameters": [
+                    { "in": "query", "name": "lang", "required": true },
+                    { "in": "query", "name": "ids", "required": true }
+                ],
+
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "qukntity": {
+                                            "type": "integer",
+                                            "description": "Кількість документів",
+                                            "example": 10
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/product"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/products/category/{category}": {
+            "get": {
+                "tags": ["Products"],
+                "summary": "Get products by category",
+                "parameters": [
+                    { "in": "query", "name": "lang", "required": true },
+                    { "in": "path", "name": "category", "required": true }
+                ],
+
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "qukntity": {
+                                            "type": "integer",
+                                            "description": "Кількість документів",
+                                            "example": 10
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/product"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {}
+                    }
+                }
+            }
+        },
+
+        "/products/catalog/{productId}": {
+            "get": {
+                "tags": ["Products"],
+                "summary": "Get product by id",
+                "parameters": [
+                    { "in": "query", "name": "lang", "required": true },
+                    { "in": "path", "name": "productId", "required": true }
+                ],
+
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/product"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {}
+                    }
+                }
+            },
+            "patch": {
+                "tags": ["Products"],
+                "summary": "Update product by id",
+                "parameters": [
+                    { "in": "path", "name": "productId", "required": true }
+                ],
+                "security": [{ "Bearer": [] }],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/productRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/product"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {}
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Products"],
+                "summary": "Delete product by id",
+                "parameters": [
+                    { "in": "path", "name": "productId", "required": true }
+                ],
+                "security": [{ "Bearer": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/products/search": {
+            "get": {
+                "tags": ["Products"],
+                "summary": "Search product by name",
+                "parameters": [
+                    { "in": "query", "name": "lang", "required": true },
+                    { "in": "query", "name": "search", "required": true }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "qukntity": {
+                                            "type": "integer",
+                                            "description": "Кількість документів",
+                                            "example": 10
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/product"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/orders": {
+            "get": {
+                "tags": ["Orders"],
+                "summary": "Get all orders",
+                "parameters": [
+                    { "in": "query", "name": "limit" },
+                    { "in": "query", "name": "page" },
+                    {
+                        "in": "query",
+                        "name": "status",
+                        "description": "One of new, completed, cancelled, processing. To get all don't use it."
+                    },
+                    { "in": "query", "name": "lang" }
+                ],
+                "security": [{ "Bearer": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "qukntity": {
+                                            "type": "integer",
+                                            "description": "Кількість документів",
+                                            "example": 10
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/order"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {}
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Orders"],
+                "summary": "Create order in db",
+                "parameters": [{ "in": "query", "name": "lang" }],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/orderRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 201
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Товар було успішно доданно."
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/product"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/orders/order/{orderId}": {
+            "get": {
+                "tags": ["Orders"],
+                "summary": "Get orders by id",
+                "parameters": [
+                    { "in": "query", "name": "lang", "required": true },
+                    { "in": "path", "name": "orderId" }
+                ],
+                "security": [{ "Bearer": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/order"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {}
+                    }
+                }
+            },
+            "patch": {
+                "tags": ["Orders"],
+                "summary": "Update order in db",
+                "parameters": [
+                    { "in": "path", "name": "orderId" },
+                    { "in": "query", "name": "lang" }
+                ],
+                "security": [{ "Bearer": [] }],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/orderRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 201
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Товар було успішно доданно."
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/product"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {}
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Orders"],
+                "summary": "Delete order in db",
+                "parameters": [{ "in": "path", "name": "orderId" }],
+                "security": [{ "Bearer": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/orders/search/{order}": {
+            "get": {
+                "tags": ["Orders"],
+                "summary": "Get orders by id",
+                "parameters": [
+                    { "in": "query", "name": "lang", "required": true },
+                    { "in": "path", "name": "order" }
+                ],
+                "security": [{ "Bearer": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/order"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/dashboard/login": {
+            "post": {
+                "tags": ["User"],
+                "summary": "User login",
+                "parameters": [],
+                "requestBody": {
+                    "description": "Login's object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "description": "Email",
+                                        "example": "test@test.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "description": "Password",
+                                        "example": "test1111"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/user"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/dashboard/logout": {
+            "post": {
+                "tags": ["User"],
+                "summary": "User logout",
+                "parameters": [],
+                "security": [{ "Bearer": [] }],
+
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/dashboard/resetpassword": {
+            "patch": {
+                "tags": ["User"],
+                "summary": "User reset password",
+                "parameters": [],
+                "requestBody": {
+                    "description": "User's email",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "description": "User's email",
+                                        "format": "email"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "User updated, email send"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/dashboard/newpassword": {
+            "patch": {
+                "tags": ["User"],
+                "summary": "User reset password",
+                "parameters": [],
+                "requestBody": {
+                    "description": "User's email",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "resetToken": {
+                                        "type": "string",
+                                        "description": "resetToken",
+                                        "example": "a55a69q633ad4adqqw632aas+dasda6sd+9sd5as+das4dad.as5da6sd23as.dasd4a"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "description": "User's new password",
+                                        "example": "newpassword"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/user"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/info": {
+            "get": {
+                "tags": ["Account Info"],
+                "summary": "Get account info",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/info"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {}
+                    }
+                }
+            },
+            "patch": {
+                "tags": ["Account Info"],
+                "summary": "Get account info",
+                "parameters": [],
+                "security": [{ "Bearer": [] }],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/info"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 201
+                                        },
+                                        "schema": {
+                                            "$ref": "#/components/schemas/info"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {}
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "productRequest": {
+                "type": "object",
+                "properties": {
+                    "desc_uk.title": {
+                        "type": "string",
+                        "description": "Назва страви",
+                        "example": "Гречана каша"
+                    },
+                    "desc_uk.category": {
+                        "type": "string",
+                        "description": "Категорія страви одна з Сніданки, Основні страви, Супи, Снеки та напої",
+                        "example": "Сніданки"
+                    },
+                    "desc_uk.compound": {
+                        "type": "string",
+                        "description": "Опис страви",
+                        "example": "греча"
+                    },
+                    "desc_uk.description": {
+                        "type": "string",
+                        "description": "Опис страви",
+                        "example": "гречана каша"
+                    },
+                    "desc_uk.cooking_method": {
+                        "type": "string",
+                        "description": "Опис страви",
+                        "example": "Варити 10 хвилин"
+                    },
+                    "desc_uk.weight": {
+                        "type": "string",
+                        "description": "Вага страви",
+                        "example": "2 кг"
+                    },
+                    "desc_uk.expiration_date": {
+                        "type": "string",
+                        "description": "Дата придатності страви",
+                        "example": "3 місяці"
+                    },
+                    "desc_uk.per_package": {
+                        "type": "integer",
+                        "description": "Килькість порцій в страві",
+                        "example": "10"
+                    },
+                    "desc_uk.cooking_method_short": {
+                        "type": "string",
+                        "description": "Метод приготування страви",
+                        "example": "Варити"
+                    },
+                    "desc_en.title": {
+                        "type": "string",
+                        "description": "Назва страви",
+                        "example": "Гречана каша"
+                    },
+                    "desc_en.category": {
+                        "type": "string",
+                        "description": "Категорія страви одна з Сніданки, Основні страви, Супи, Снеки та напої",
+                        "example": "Сніданки"
+                    },
+                    "desc_en.compound": {
+                        "type": "string",
+                        "description": "Опис страви",
+                        "example": "греча"
+                    },
+                    "desc_en.description": {
+                        "type": "string",
+                        "description": "Опис страви",
+                        "example": "йцукен"
+                    },
+                    "desc_en.cooking_method": {
+                        "type": "string",
+                        "description": "Опис страви",
+                        "example": "йцууйу"
+                    },
+                    "desc_en.weight": {
+                        "type": "string",
+                        "description": "Вага страви",
+                        "example": "2 кг"
+                    },
+                    "desc_en.expiration_date": {
+                        "type": "string",
+                        "description": "Дата придатності страви",
+                        "example": "3 місяці"
+                    },
+                    "desc_en.per_package": {
+                        "type": "integer",
+                        "description": "Килькість порцій в страві",
+                        "example": "10"
+                    },
+                    "desc_en.cooking_method_short": {
+                        "type": "string",
+                        "description": "Метод приготування страви",
+                        "example": "Варити"
+                    },
+
+                    "image": {
+                        "type": "array",
+                        "items": { "type": "file" }
+                    },
+                    "isAvailable": {
+                        "type": "boolean",
+                        "example": false
+                    }
+                }
+            },
+            "product": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "id страви",
+                        "example": "64401076c5a9a7ea1c5b4bf6"
+                    },
+                    "desc": {
+                        "type": "object",
+                        "properties": {
+                            "title": {
+                                "type": "string",
+                                "description": "Назва страви",
+                                "example": "Гречана каша"
+                            },
+                            "category": {
+                                "type": "string",
+                                "description": "Категорія страви одна з Сніданки, Основні страви, Супи, Снеки та напої",
+                                "example": "Сніданки"
+                            },
+                            "compound": {
+                                "type": "string",
+                                "description": "Опис страви",
+                                "example": "греча"
+                            },
+                            "description": {
+                                "type": "string",
+                                "description": "Опис страви",
+                                "example": "йцукен"
+                            },
+                            "cooking_method": {
+                                "type": "string",
+                                "description": "Опис страви",
+                                "example": "йцууйу"
+                            },
+                            "weight": {
+                                "type": "string",
+                                "description": "Вага страви",
+                                "example": "2 кг"
+                            },
+                            "expiration_date": {
+                                "type": "string",
+                                "description": "Дата придатності страви",
+                                "example": "3 місяці"
+                            },
+                            "per_package": {
+                                "type": "integer",
+                                "description": "Килькість порцій в страві",
+                                "example": "10"
+                            },
+                            "cooking_method_short": {
+                                "type": "string",
+                                "description": "Метод приготування страви",
+                                "example": "Варити"
+                            }
+                        }
+                    },
+
+                    "imgUrls": {
+                        "type": "array",
+                        "items": { "type": "string" },
+                        "description": "Посилання на фото",
+                        "example": [
+                            "https://res.cloudinary.com/dryhnlf4u/image/upload/v1681999695/os2gfcqsr9kcajz63suq.png",
+                            "https://res.cloudinary.com/dryhnlf4u/image/upload/v1681999696/crokla27cdaxoruszjf9.png",
+                            "https://res.cloudinary.com/dryhnlf4u/image/upload/v1681999697/issogt5h2bzgvdlhbgov.png"
+                        ]
+                    },
+                    "isAvailable": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "createdAt": {
+                        "type": "date-time",
+                        "description": "Дата додаввання страви",
+                        "example": "2023-04-19T16:01:58.370+00:00"
+                    },
+                    "updatedAt": {
+                        "type": "date-time",
+                        "description": "Дата оновлення страви",
+                        "example": "2023-04-19T16:01:58.370+00:00"
+                    }
+                }
+            },
+            "orderRequest": {
+                "type": "object",
+                "properties": {
+                    "orderItems": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "quantity": {
+                                    "type": "integer",
+                                    "description": "Кількість",
+                                    "example": 10
+                                },
+                                "product": {
+                                    "type": "string",
+                                    "description": "_id товару",
+                                    "example": "6446d4ef93da58d9533a1338"
+                                }
+                            }
+                        }
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Ім'я замовника",
+                        "example": "Замовник"
+                    },
+                    "connection_type": {
+                        "type": "string",
+                        "description": "Метод зворотнього зв'язку Дзвінок, SMS на мобільний, Signal, Telegram, WhatsApp, Viber",
+                        "example": "Дзвінок"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "description": "Контактний номер замовника",
+                        "example": "+380990000000"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "Пошта замовника",
+                        "example": "email@email.com"
+                    },
+                    "comments": {
+                        "type": "string",
+                        "description": "коментар до замовлення",
+                        "example": "Коментар"
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "Статус замовлення",
+                        "example": "new"
+                    }
+                }
+            },
+            "order": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "id замовлення",
+                        "example": "64401076c5a9a7ea1c5b4bf6"
+                    },
+                    "orderItems": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "quantity": {
+                                    "type": "integer",
+                                    "description": "Кількість",
+                                    "example": 10
+                                },
+                                "product": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "description": "Product id",
+                                            "example": "649de764a854970e170d3247"
+                                        },
+                                        "desc": {
+                                            "type": "object",
+                                            "properties": {
+                                                "title": {
+                                                    "type": "string",
+                                                    "description": "Назва страви",
+                                                    "example": "Гречана каша"
+                                                },
+                                                "weight": {
+                                                    "type": "string",
+                                                    "description": "Вага страви",
+                                                    "example": "2 кг"
+                                                },
+                                                "per_package": {
+                                                    "type": "integer",
+                                                    "description": "Килькість порцій в страві",
+                                                    "example": "10"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Ім'я замовника",
+                        "example": "Замовник"
+                    },
+                    "connection_type": {
+                        "type": "string",
+                        "description": "Метод зворотнього зв'язку call, sms, signal, telegram, whatsApp, viber",
+                        "example": "Дзвінок"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "description": "Контактний номер замовника",
+                        "example": "+380990000000"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "Пошта замовника",
+                        "example": "email@email.com"
+                    },
+                    "comments": {
+                        "type": "string",
+                        "description": "коментар до замовлення",
+                        "example": "Коментар"
+                    },
+                    "order_id": {
+                        "type": "string",
+                        "description": "Номер замовлення",
+                        "example": "1000086"
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "Статус замовлення",
+                        "example": "new"
+                    },
+                    "createdAt": {
+                        "type": "date-time",
+                        "description": "Дата додаввання замовлення",
+                        "example": "2023-04-19T16:01:58.370+00:00"
+                    },
+
+                    "updatedAt": {
+                        "type": "date-time",
+                        "description": "Дата оновлення замовлення",
+                        "example": "2023-04-19T16:01:58.370+00:00"
+                    }
+                }
+            },
+            "user": {
+                "type": "object",
+                "properties": {
+                    "user": {
+                        "type": "object",
+                        "properties": {
+                            "_id": {
+                                "type": "string",
+                                "description": "id info",
+                                "example": "644968128b4bc56ac2d72423"
+                            },
+                            "email": {
+                                "type": "string",
+                                "description": "email",
+                                "example": "test@test.com"
+                            },
+                            "isAdmin": {
+                                "type": "boolean",
+                                "description": "Is user admin",
+                                "example": "true"
+                            }
+                        }
+                    },
+                    "token": {
+                        "type": "string",
+                        "description": "User token",
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NDk2ODEyOGI0YmM1NmFjMmQ3MjQyMyIsImlhdCI6MTY4NTk3OTUxMH0.FFv11_vVd9b0SshX934FzJMXe1zE2RmExIJqql3RKjg"
+                    }
+                }
+            },
+            "info": {
+                "type": "object",
+                "properties": {
+                    "iban_uah": {
+                        "type": "object",
+                        "properties": {
+                            "iban": {
+                                "type": "string",
+                                "description": "iban рахунку в грн",
+                                "example": "UA000000000000000000000000000"
+                            },
+                            "isActive": {
+                                "type": "boolean",
+                                "description": "Is account active",
+                                "example": true
+                            }
+                        }
+                    },
+                    "iban_usd": {
+                        "type": "object",
+                        "properties": {
+                            "iban": {
+                                "type": "string",
+                                "description": "iban рахунку в грн",
+                                "example": "UA000000000000000000000000000"
+                            },
+                            "isActive": {
+                                "type": "boolean",
+                                "description": "Is account active",
+                                "example": true
+                            }
+                        }
+                    },
+                    "monobank": {
+                        "type": "object",
+                        "properties": {
+                            "url": {
+                                "type": "string",
+                                "description": "iban рахунку в грн",
+                                "example": "https://www.monobank.ua"
+                            },
+                            "isActive": {
+                                "type": "boolean",
+                                "description": "Is account active",
+                                "example": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "Bearer": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
